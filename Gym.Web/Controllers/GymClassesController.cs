@@ -9,6 +9,7 @@ using Gym.Web.Data;
 using Gym.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics;
 
 namespace Gym.Web.Controllers
 {
@@ -30,6 +31,7 @@ namespace Gym.Web.Controllers
         }
 
         // GET: GymClasses/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -50,6 +52,7 @@ namespace Gym.Web.Controllers
         }
 
         // GET: GymClasses/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -91,6 +94,7 @@ namespace Gym.Web.Controllers
         // POST: GymClasses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,StartTime,Duration,Description")] GymClass gymClass)
@@ -124,6 +128,7 @@ namespace Gym.Web.Controllers
         }
 
         // GET: GymClasses/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -142,6 +147,7 @@ namespace Gym.Web.Controllers
         }
 
         // POST: GymClasses/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
