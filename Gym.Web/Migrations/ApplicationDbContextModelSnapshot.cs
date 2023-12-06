@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Gym.Web.Data.Migrations
+namespace Gym.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -89,18 +89,14 @@ namespace Gym.Web.Data.Migrations
 
             modelBuilder.Entity("Gym.Web.Models.ApplicationUserGymClass", b =>
                 {
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GymClassId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ApplicationUserId1")
+                    b.Property<string>("ApplicationUserId")
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ApplicationUserId", "GymClassId");
+                    b.Property<Guid>("GymClassId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("ApplicationUserId1");
+                    b.HasKey("ApplicationUserId", "GymClassId");
 
                     b.HasIndex("GymClassId");
 
@@ -109,11 +105,9 @@ namespace Gym.Web.Data.Migrations
 
             modelBuilder.Entity("Gym.Web.Models.GymClass", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -273,15 +267,21 @@ namespace Gym.Web.Data.Migrations
 
             modelBuilder.Entity("Gym.Web.Models.ApplicationUserGymClass", b =>
                 {
-                    b.HasOne("Gym.Web.Models.ApplicationUser", null)
+                    b.HasOne("Gym.Web.Models.ApplicationUser", "applicationUser")
                         .WithMany("AttendingClasses")
-                        .HasForeignKey("ApplicationUserId1");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Gym.Web.Models.GymClass", null)
+                    b.HasOne("Gym.Web.Models.GymClass", "gymClass")
                         .WithMany("AttendingMembers")
                         .HasForeignKey("GymClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("applicationUser");
+
+                    b.Navigation("gymClass");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

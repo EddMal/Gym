@@ -1,14 +1,17 @@
-﻿namespace Gym.Web.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Gym.Web.Models
 {
     public class ApplicationUserGymClass
     {
         //Foreign keys
-        public int ApplicationUserId { get; set; }
-        public int GymClassId { get; set; }
+        [MaxLength(450)]
+        public string ApplicationUserId { get; set; } = default!;
+        public Guid GymClassId { get; set; } 
 
-        //Navigation Properties?
+        //Navigation Properties
 
-        //public ApplicationUser applicationUser { get; set; }
-        //public GymClass gymClass { get; set;}
+        public ApplicationUser applicationUser { get; set; } = default!;
+        public GymClass gymClass { get; set; } = default!;
     }
 }

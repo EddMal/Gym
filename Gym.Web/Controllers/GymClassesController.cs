@@ -26,7 +26,7 @@ namespace Gym.Web.Controllers
         }
 
         // GET: GymClasses/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -86,7 +86,7 @@ namespace Gym.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartTime,Duration,Description")] GymClass gymClass)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,StartTime,Duration,Description")] GymClass gymClass)
         {
             if (id != gymClass.Id)
             {
@@ -117,7 +117,7 @@ namespace Gym.Web.Controllers
         }
 
         // GET: GymClasses/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -149,7 +149,7 @@ namespace Gym.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GymClassExists(int id)
+        private bool GymClassExists(Guid id)
         {
             return _context.GymClass.Any(e => e.Id == id);
         }
