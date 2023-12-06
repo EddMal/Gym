@@ -26,7 +26,7 @@ namespace Gym.Web.Controllers
         // GET: GymClasses
         public async Task<IActionResult> Index()
         {
-            return View(await _context.GymClass.ToListAsync());
+            return View(await _context.GymClasses.ToListAsync());
         }
 
         // GET: GymClasses/Details/5
@@ -34,17 +34,19 @@ namespace Gym.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
-            var gymClass = await _context.GymClass
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (gymClass == null)
+            var gymClassWithAttendees = await _context.GymClasses.Where(g => g.Id == id)
+                .Include(c => c.AttendingMembers)
+                .ThenInclude(u => u.applicationUser).FirstOrDefaultAsync();
+
+            if (gymClassWithAttendees == null)
             {
                 return NotFound();
             }
 
-            return View(gymClass);
+            return View(gymClassWithAttendees);
         }
 
         // GET: GymClasses/Create
@@ -70,14 +72,15 @@ namespace Gym.Web.Controllers
         }
 
         // GET: GymClasses/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [Authorize]
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var gymClass = await _context.GymClass.FindAsync(id);
+            var gymClass = await _context.GymClasses.FindAsync(id);
             if (gymClass == null)
             {
                 return NotFound();
@@ -128,7 +131,7 @@ namespace Gym.Web.Controllers
                 return NotFound();
             }
 
-            var gymClass = await _context.GymClass
+            var gymClass = await _context.GymClasses
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (gymClass == null)
             {
@@ -143,10 +146,10 @@ namespace Gym.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var gymClass = await _context.GymClass.FindAsync(id);
+            var gymClass = await _context.GymClasses.FindAsync(id);
             if (gymClass != null)
             {
-                _context.GymClass.Remove(gymClass);
+                _context.GymClasses.Remove(gymClass);
             }
 
             await _context.SaveChangesAsync();
@@ -190,7 +193,7 @@ namespace Gym.Web.Controllers
 
         private bool GymClassExists(Guid id)
         {
-            return _context.GymClass.Any(e => e.Id == id);
+            return _context.GymClasses.Any(e => e.Id == id);
         }
     }
 }
