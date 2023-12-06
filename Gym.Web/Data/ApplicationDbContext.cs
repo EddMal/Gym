@@ -14,11 +14,12 @@ namespace Gym.Web.Data
 
         public DbSet<GymClass> GymClass { get; set; } = default!;
         public DbSet<ApplicationUser> ApplicationUser { get; set; } = default!;
+        public DbSet<ApplicationUserGymClass> ApplicationUserGymClasses { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            //Fluent api for connection table:
             modelBuilder.Entity<ApplicationUserGymClass>().HasKey(t => new { t.ApplicationUserId, t.GymClassId });
         }
 

@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Gym.Web.Data;
 using Gym.Web.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Gym.Web.Controllers
 {
     public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GymClassesController(ApplicationDbContext context)
+        public GymClassesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: GymClasses
@@ -92,7 +96,7 @@ namespace Gym.Web.Controllers
             {
                 return NotFound();
             }
-
+            //ModelState.Remove("AttendingMembers");
             if (ModelState.IsValid)
             {
                 try
@@ -137,7 +141,7 @@ namespace Gym.Web.Controllers
         // POST: GymClasses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var gymClass = await _context.GymClass.FindAsync(id);
             if (gymClass != null)
@@ -146,6 +150,41 @@ namespace Gym.Web.Controllers
             }
 
             await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: GymClasses/Toggle/5
+        [Authorize]
+        public async Task<IActionResult> BookingToggle(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return NotFound();
+            }
+
+            var attending = await _context.ApplicationUserGymClasses.FindAsync(userId, id);
+            if (attending == null) {
+                var booking = new ApplicationUserGymClass
+                {
+                    ApplicationUserId = userId,
+                    GymClassId = (Guid)id
+                };
+                _context.ApplicationUserGymClasses.Add(booking);
+            }
+            else
+            {
+                _context.Remove(attending);
+            }
+
+            await _context.SaveChangesAsync();
+
+
             return RedirectToAction(nameof(Index));
         }
 
