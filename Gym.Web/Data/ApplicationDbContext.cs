@@ -21,6 +21,10 @@ namespace Gym.Web.Data
             base.OnModelCreating(modelBuilder);
             //Fluent api for connection table:
             modelBuilder.Entity<ApplicationUserGymClass>().HasKey(t => new { t.ApplicationUserId, t.GymClassId });
+
+            //ShadowProperty
+            modelBuilder.Entity<ApplicationUser>()
+                .Property < DateTime>("TimeOfRegistration");
         }
 
     }

@@ -1,4 +1,5 @@
 using Gym.Web.Data;
+using Gym.Web.Data.Extensions;
 using Gym.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,7 @@ namespace Gym.Web
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
+                await app.SeedDataAsync();
             }
             else
             {

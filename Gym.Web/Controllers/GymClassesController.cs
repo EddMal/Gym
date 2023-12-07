@@ -25,6 +25,7 @@ namespace Gym.Web.Controllers
         }
 
         // GET: GymClasses
+        // Use: [AllowAnonymous] and remove [Authorize] (alternative).
         public async Task<IActionResult> Index()
         {
             return View(await _context.GymClasses.ToListAsync());
