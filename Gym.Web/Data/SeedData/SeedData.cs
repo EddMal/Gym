@@ -26,15 +26,15 @@ namespace Gym.Web.Data.SeedData
             userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
             var roleNames = new[] { "User", "Admin" };
-            var adminEmail = (string v) => { return $"admin{v}@admin.com"; };
+            var adminEmail = (string v) => { return $"admin{v}@Gymbokning.se"; };
             var userEmail = (string v) => { return $"user{v}@user.com"; };
-            var adminPassword = (string v) => { return $"Admin{v}@admin.com"; };
+            var adminPassword = (string v) => { return $"Admin{v}@Gymbokning.se"; };
             var userPassword = (string v) => { return $"User{v}@user.com"; };
 
             await AddRolesAsync(roleNames);
 
-            var admin = await AddAccountAsync(adminEmail, "Admin", "Admin", 0, adminPassword, "2");
-            var user = await AddAccountAsync(userEmail, "User", "User", 0, userPassword, "2");
+            var admin = await AddAccountAsync(adminEmail, "Admin", "Admin", 0, adminPassword, "1");
+            var user = await AddAccountAsync(userEmail, "User", "User", 0, userPassword, "1");
 
             await AddminUserToRoleAsync(admin, "Admin");
             await AddminUserToRoleAsync(user, "User");
@@ -74,6 +74,7 @@ namespace Gym.Web.Data.SeedData
                 LastName = $"{lastName}{mailPasswordExtension}",
                 //Age = age,
                 EmailConfirmed = true,
+                TimeOfRegistration = DateTime.Now
             };
 
             var result = await userManager.CreateAsync(user,password(mailPasswordExtension));

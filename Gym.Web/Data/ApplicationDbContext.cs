@@ -22,7 +22,7 @@ namespace Gym.Web.Data
             //Fluent api for connection table:
             modelBuilder.Entity<ApplicationUserGymClass>().HasKey(t => new { t.ApplicationUserId, t.GymClassId });
 
-            //ShadowProperty
+            //ShadowProperty//Not needed.
             modelBuilder.Entity<ApplicationUser>()
                 .Property < DateTime>("TimeOfRegistration");
         }

@@ -9,7 +9,7 @@
 <h1>The Gym</h1>
 
 <p>
-     @if (SignInManager.IsSignedIn(User))
+     @if (User.IsInRole("Admin"))
      {
         <a asp-action="Create">Create a new gym class</a>
      }
@@ -52,17 +52,32 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @if (SignInManager.IsSignedIn(User))
+                    @if (User.Identity.IsAuthenticated)
                     {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <span> | </span>
+                        if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <span> | </span>
+                            <a asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                            <span> | </span>
+                            <a asp-action="Delete" asp-route-id="@item.Id"> Delete </a >
+                            <span> | </span>
+                            <a asp-action="BookingToggle" asp-route-id="@item.Id"> Book class/Cancel participation</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                            <span> | </span>
+                            <a asp-action="BookingToggle" asp-route-id="@item.Id"> Book class/Cancel participation</a>
+                        }
+                    }
+                    else
+                    {
                         <a asp-action="Details" asp-route-id="@item.Id"> Details </a>
                         <span> | </span>
-                        <a asp-action="Delete" asp-route-id="@item.Id"> Delete </a >
-                        <span> | </span>
-                        <a asp-action="BookingToggle" asp-route-id="@item.Id"> Book class/Cancel participation</a>
+                        <p>Login/Register to book</p>
                     }
-            </td>
+                </td>
         </tr>
 }
     </tbody>
