@@ -4,11 +4,12 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "The Gym";
+    //var displayPassedClasses = false;
 }
 
 <h1>The Gym</h1>
 
-<p>
+
      @if (User.IsInRole("Admin"))
      {
         <a asp-action="Create">Create a new gym class</a>
@@ -17,7 +18,17 @@
      {
      <p>Login to take part of the classes in the gym, not a member? Don't worry, register!</p>
      }
-</p>
+
+<br>
+
+<form method="get">
+    <input name="displaypassedClasses" type="checkbox" value="true" /> Display classes with passed dates. <br />
+    <button>Update</button>
+</form>
+
+@*  <input id="Passed" name="Passed" type="checkbox" value="@displayPassedClasses" />
+<label for="Passed">Display classes with passed dates.</label>  *@
+
 <table class="table">
     <thead>
         <tr>
@@ -52,10 +63,15 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
+                    
                     @if (User.Identity.IsAuthenticated)
                     {
                         
-                        var attending = item.AttendingMembers.Any(c => c.applicationUser.Email == User.Identity.Name) ? (User.Identity.Name != null && item.AttendingMembers != null) : false;
+                        var attending = false;
+                        if (item.AttendingMembers != null && User.Identity.Name != null)
+                        {
+                             attending = item.AttendingMembers.Any(c => c.applicationUser.Email == User.Identity.Name) ? (User.Identity.Name != null || item.AttendingMembers != null) : false;
+                        }
 
                         if (User.IsInRole("Admin"))
                         {

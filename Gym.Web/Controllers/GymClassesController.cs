@@ -26,11 +26,23 @@ namespace Gym.Web.Controllers
 
         // GET: GymClasses
         // Use: [AllowAnonymous] and remove [Authorize] (alternative).
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool displaypassedClasses = false)
         {
-            var gymClasses = await _context.GymClasses.Include(gc=>gc.AttendingMembers).ThenInclude(a=>a.applicationUser)
+            var gymClasses = new List<GymClass>();
+            //Create dto limiting user data to limit exposure.
+            if (!displaypassedClasses)
+            {
+                gymClasses = await _context.GymClasses.Include(gc => gc.AttendingMembers).ThenInclude(a => a.applicationUser)
                 .ToListAsync();
-            return View(await _context.GymClasses.ToListAsync());
+            }
+            else
+            {
+                gymClasses = await _context.GymClasses.Include(gc => gc.AttendingMembers).ThenInclude(a => a.applicationUser).Where(gc => gc.StartTime > DateTime.Now)
+                 .ToListAsync();
+            }
+
+            //return View(await _context.GymClasses.ToListAsync());
+            return View(gymClasses);
         }
 
         // GET: GymClasses/Details/5
