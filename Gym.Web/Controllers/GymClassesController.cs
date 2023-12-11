@@ -28,6 +28,8 @@ namespace Gym.Web.Controllers
         // Use: [AllowAnonymous] and remove [Authorize] (alternative).
         public async Task<IActionResult> Index()
         {
+            var gymClasses = await _context.GymClasses.Include(gc=>gc.AttendingMembers).ThenInclude(a=>a.applicationUser)
+                .ToListAsync();
             return View(await _context.GymClasses.ToListAsync());
         }
 

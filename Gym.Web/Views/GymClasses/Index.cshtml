@@ -54,6 +54,9 @@
                 <td>
                     @if (User.Identity.IsAuthenticated)
                     {
+                        <p>@User.Identity.Name</p>
+                        var attending = item.AttendingMembers.Any(c => c.applicationUser.Email == User.Identity.Name) ? (User.Identity.Name != null && item.AttendingMembers != null) : false;
+                        <p>@attending</p>
                         if (User.IsInRole("Admin"))
                         {
                             <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
