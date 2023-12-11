@@ -10,6 +10,8 @@ using Gym.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Diagnostics;
+using Gym.Web.Migrations;
+using System.Security.Claims;
 
 namespace Gym.Web.Controllers
 {
@@ -63,7 +65,15 @@ namespace Gym.Web.Controllers
         [Authorize]
         public async Task<IActionResult> History()
         {
+
             var userId = _userManager.GetUserId(User);
+
+            // Temp initiation of user full name claim,
+            //var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            //var fullNameClaim = new Claim("FullName", user.FirstName + " " + user.LastName);
+            //await _userManager.AddClaimAsync(user, fullNameClaim);
+
+           
 
             //Create viewmodel for limiting of user data exposure.
             var gymClasses = await _context.ApplicationUserGymClasses.Where(gc => gc.ApplicationUserId == userId && gc.gymClass.StartTime < DateTime.Now).Include(gc => gc.gymClass).ToListAsync();
