@@ -49,7 +49,7 @@ namespace Gym.Web.Controllers
         {
             var userId = _userManager.GetUserId(User);
 
-            //Create dto limiting user data to limit exposure.
+            //Create viewmodel for limiting of user data exposure.
             var gymClasses = await _context.ApplicationUserGymClasses.Where(gc=>gc.ApplicationUserId==userId && gc.gymClass.StartTime > DateTime.Now).Include(gc=>gc.gymClass).ToListAsync();
 
             if (gymClasses == null) return View(nameof(Index));
