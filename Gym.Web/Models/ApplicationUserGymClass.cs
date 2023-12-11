@@ -4,6 +4,7 @@ namespace Gym.Web.Models
 {
     public class ApplicationUserGymClass
     {
+        //Add attributes, input validation.
         //Foreign keys
         [MaxLength(450)]
         public string ApplicationUserId { get; set; } = default!;

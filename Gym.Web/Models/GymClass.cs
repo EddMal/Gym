@@ -4,7 +4,7 @@ namespace Gym.Web.Models
 {
     public class GymClass
     {
-
+        //Add attributes, input validation.
         public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime StartTime { get; set; }

@@ -4,6 +4,7 @@ namespace Gym.Web.Models
 {
     public class ApplicationUser: IdentityUser
     {
+        //Add attributes, input validation.
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName}";
