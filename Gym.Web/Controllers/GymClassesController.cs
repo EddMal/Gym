@@ -44,6 +44,8 @@ namespace Gym.Web.Controllers
             //return View(await _context.GymClasses.ToListAsync());
             return View(gymClasses);
         }
+
+        //GET
         [Authorize]
         public async Task<IActionResult> BookedSessions()
         {
@@ -51,6 +53,20 @@ namespace Gym.Web.Controllers
 
             //Create viewmodel for limiting of user data exposure.
             var gymClasses = await _context.ApplicationUserGymClasses.Where(gc=>gc.ApplicationUserId==userId && gc.gymClass.StartTime > DateTime.Now).Include(gc=>gc.gymClass).ToListAsync();
+
+            if (gymClasses == null) return View(nameof(Index));
+
+            return View(gymClasses);
+        }
+
+        //GET
+        [Authorize]
+        public async Task<IActionResult> History()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            //Create viewmodel for limiting of user data exposure.
+            var gymClasses = await _context.ApplicationUserGymClasses.Where(gc => gc.ApplicationUserId == userId && gc.gymClass.StartTime < DateTime.Now).Include(gc => gc.gymClass).ToListAsync();
 
             if (gymClasses == null) return View(nameof(Index));
 

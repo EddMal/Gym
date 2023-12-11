@@ -85,7 +85,11 @@
                             <span> | </span>
                             <a asp-action="Delete" asp-route-id="@item.Id"> Delete </a >
                             <span> | </span>
-                            if (attending == true)
+                            if (item.StartTime < DateTime.Now)
+                            {
+                                <p>Session start time has passed</p>
+                            }
+                            else if (attending == true)
                             {
                                 <a asp-action="BookingToggle" asp-route-id="@item.Id">Cancel participation</a>
                             }
@@ -98,7 +102,11 @@
                         {
                             <a asp-action="Details" asp-route-id="@item.Id"> Details </a>
                             <span> | </span>
-                            if (attending == true)
+                            if (item.StartTime < DateTime.Now)
+                            {
+                                <p>Session start time has passed</p>
+                            }
+                            else if(attending == true)
                             {
                                 <a asp-action="BookingToggle" asp-route-id="@item.Id">Cancel participation</a>
                             }
