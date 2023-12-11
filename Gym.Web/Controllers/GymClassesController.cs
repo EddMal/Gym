@@ -30,7 +30,7 @@ namespace Gym.Web.Controllers
         {
             var gymClasses = new List<GymClass>();
             //Create dto limiting user data to limit exposure.
-            if (!displaypassedClasses)
+            if (displaypassedClasses)
             {
                 gymClasses = await _context.GymClasses.Include(gc => gc.AttendingMembers).ThenInclude(a => a.applicationUser)
                 .ToListAsync();
@@ -42,6 +42,18 @@ namespace Gym.Web.Controllers
             }
 
             //return View(await _context.GymClasses.ToListAsync());
+            return View(gymClasses);
+        }
+        [Authorize]
+        public async Task<IActionResult> BookedSessions()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            //Create dto limiting user data to limit exposure.
+            var gymClasses = await _context.ApplicationUserGymClasses.Where(gc=>gc.ApplicationUserId==userId && gc.gymClass.StartTime > DateTime.Now).Include(gc=>gc.gymClass).ToListAsync();
+
+            if (gymClasses == null) return View(nameof(Index));
+
             return View(gymClasses);
         }
 

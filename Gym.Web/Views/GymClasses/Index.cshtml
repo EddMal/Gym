@@ -12,10 +12,14 @@
 
      @if (User.IsInRole("Admin"))
      {
-        <a asp-action="Create">Create a new gym class</a>
-     }
-     else
-     {
+    <a asp-action="Create">Create a new gym class</a>
+    }
+    else if(User.IsInRole("User"))
+    {
+    <p>Welcome member!</p>
+    }
+    else
+    {
      <p>Login to take part of the classes in the gym, not a member? Don't worry, register!</p>
      }
 
